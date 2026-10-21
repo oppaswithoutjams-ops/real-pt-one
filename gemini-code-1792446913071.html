@@ -1,0 +1,402 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Entraînement Vocabulaire Portugais - Lição 6</title>
+  <style>
+    :root {
+      --primary: #059669;
+      --primary-hover: #047857;
+      --bg: #f3f4f6;
+      --card-bg: #ffffff;
+      --text: #1f2937;
+      --text-muted: #6b7280;
+      --border: #e5e7eb;
+      --correct: #10b981;
+      --incorrect: #ef4444;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+
+    body {
+      background-color: var(--bg);
+      color: var(--text);
+      line-height: 1.5;
+      padding: 20px;
+    }
+
+    .container {
+      max-width: 800px;
+      margin: 0 auto;
+    }
+
+    header {
+      text-align: center;
+      margin-bottom: 25px;
+      background: var(--card-bg);
+      padding: 20px;
+      border-radius: 12px;
+      box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1);
+    }
+
+    h1 {
+      color: var(--primary);
+      font-size: 1.8rem;
+      margin-bottom: 8px;
+    }
+
+    p.subtitle {
+      color: var(--text-muted);
+      font-size: 0.95rem;
+    }
+
+    .filters {
+      display: flex;
+      gap: 10px;
+      margin-bottom: 20px;
+      flex-wrap: wrap;
+    }
+
+    .btn {
+      background-color: var(--card-bg);
+      border: 1px solid var(--border);
+      color: var(--text);
+      padding: 8px 16px;
+      border-radius: 8px;
+      cursor: pointer;
+      font-weight: 500;
+      transition: all 0.2s;
+    }
+
+    .btn:hover {
+      background-color: #f9fafb;
+    }
+
+    .btn.active {
+      background-color: var(--primary);
+      color: white;
+      border-color: var(--primary);
+    }
+
+    .search-box {
+      width: 100%;
+      padding: 10px 14px;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      margin-bottom: 20px;
+      font-size: 1rem;
+      outline: none;
+    }
+
+    .search-box:focus {
+      border-color: var(--primary);
+      box-shadow: 0 0 0 3px rgba(5, 150, 105, 0.1);
+    }
+
+    .vocab-list {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .vocab-item {
+      background: var(--card-bg);
+      padding: 14px 18px;
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+      border: 1px solid var(--border);
+      gap: 15px;
+    }
+
+    .english-term {
+      font-weight: 600;
+      color: #111827;
+      flex: 1;
+    }
+
+    .input-wrapper {
+      flex: 1;
+      display: flex;
+      gap: 8px;
+    }
+
+    .pt-input {
+      width: 100%;
+      padding: 8px 12px;
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      font-size: 0.95rem;
+      outline: none;
+    }
+
+    .pt-input.correct {
+      border-color: var(--correct);
+      background-color: #ecfdf5;
+    }
+
+    .pt-input.incorrect {
+      border-color: var(--incorrect);
+      background-color: #fef2f2;
+    }
+
+    .reveal-btn {
+      background: var(--bg);
+      border: 1px solid var(--border);
+      padding: 6px 12px;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 0.85rem;
+      color: var(--text-muted);
+      white-space: nowrap;
+    }
+
+    .reveal-btn:hover {
+      background: #e5e7eb;
+    }
+
+    .pt-answer {
+      display: none;
+      font-weight: 600;
+      color: var(--primary);
+      margin-top: 4px;
+      font-size: 0.9rem;
+    }
+
+    .pt-answer.visible {
+      display: block;
+    }
+
+    .badge {
+      font-size: 0.75rem;
+      padding: 2px 8px;
+      border-radius: 12px;
+      background: #e0e7ff;
+      color: #3730a3;
+      font-weight: 600;
+      text-transform: uppercase;
+    }
+
+    .badge.verb {
+      background: #fef3c7;
+      color: #92400e;
+    }
+
+    .badge.expression {
+      background: #fce7f3;
+      color: #9d174d;
+    }
+
+    @media (max-width: 600px) {
+      .vocab-item {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+      .input-wrapper {
+        width: 100%;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="container">
+    <header>
+      <h1>🇵🇹 Vocabulaire Portugais - Lição 6</h1>
+      <p class="subtitle">Devine le mot en portugais et tape la réponse ou clique sur "Voir".</p>
+    </header>
+
+    <div class="filters">
+      <button class="btn active" onclick="filterCategory('all', this)">Tous</button>
+      <button class="btn" onclick="filterCategory('noun', this)">Noms / Adjectifs</button>
+      <button class="btn" onclick="filterCategory('verb', this)">Verbes</button>
+      <button class="btn" onclick="filterCategory('expression', this)">Expressions</button>
+    </div>
+
+    <input type="text" class="search-box" id="search" placeholder="Rechercher un mot en anglais ou français..." oninput="renderVocab()">
+
+    <div class="vocab-list" id="vocabList"></div>
+  </div>
+
+  <script>
+    const vocabulary = [
+      // Vocabulaire Noms & Adjectifs
+      { en: "water", pt: "a água", type: "noun" },
+      { en: "some", pt: "algum, -a", type: "noun" },
+      { en: "baked, roasted", pt: "assado, -a", type: "noun" },
+      { en: "airplane", pt: "o avião", type: "noun" },
+      { en: "olive", pt: "a azeitona", type: "noun" },
+      { en: "banana", pt: "a banana", type: "noun" },
+      { en: "bath", pt: "o banho", type: "noun" },
+      { en: "enough", pt: "bastante", type: "noun" },
+      { en: "potato", pt: "a batata", type: "noun" },
+      { en: "french fries / potato chips", pt: "batatinhas fritas", type: "noun" },
+      { en: "edge", pt: "a beira", type: "noun" },
+      { en: "at the edge of", pt: "à beira de", type: "noun" },
+      { en: "dog", pt: "o cachorro", type: "noun" },
+      { en: "calm", pt: "calmo, -a", type: "noun" },
+      { en: "song", pt: "a canção", type: "noun" },
+      { en: "native of Rio de Janeiro", pt: "o/a carioca", type: "noun" },
+      { en: "food", pt: "a comida", type: "noun" },
+      { en: "bill", pt: "a conta", type: "noun" },
+      { en: "water glass", pt: "o copo", type: "noun" },
+      { en: "cooked, boiled", pt: "cozido, -a", type: "noun" },
+      { en: "too, excessively", pt: "demais", type: "noun" },
+      { en: "stadium", pt: "o estádio", type: "noun" },
+      { en: "factory", pt: "a fábrica", type: "noun" },
+      { en: "toasted manioc flour", pt: "a farofa", type: "noun" },
+      { en: "farm", pt: "a fazenda", type: "noun" },
+      { en: "frequently", pt: "frequentemente", type: "noun" },
+      { en: "fried", pt: "frito, -a", type: "noun" },
+      { en: "chicken", pt: "a galinha", type: "noun" },
+      { en: "bottle", pt: "a garrafa", type: "noun" },
+      { en: "people / we", pt: "a gente", type: "noun" },
+      { en: "guava jelly", pt: "a goiabada", type: "noun" },
+      { en: "winter", pt: "o inverno", type: "noun" },
+      { en: "dinner, supper", pt: "o jantar", type: "noun" },
+      { en: "snack", pt: "o lanche", type: "noun" },
+      { en: "ocean", pt: "o mar", type: "noun" },
+      { en: "marvelous", pt: "maravilhoso, -a", type: "noun" },
+      { en: "watermelon", pt: "a melancia", type: "noun" },
+      { en: "walk, stroll", pt: "o passeio", type: "noun" },
+      { en: "person", pt: "a pessoa", type: "noun" },
+      { en: "picnic", pt: "o piquenique", type: "noun" },
+      { en: "by, for, through", pt: "por", type: "noun" },
+      { en: "therefore, for that reason", pt: "por isso", type: "noun" },
+      { en: "sunset", pt: "o pôr-do-sol", type: "noun" },
+      { en: "plate, dish", pt: "o prato", type: "noun" },
+      { en: "ham", pt: "o presunto", type: "noun" },
+      { en: "how much", pt: "quanto, -a", type: "noun" },
+      { en: "cheese", pt: "o queijo", type: "noun" },
+      { en: "really", pt: "realmente", type: "noun" },
+      { en: "sandwich", pt: "o sanduíche", type: "noun" },
+      { en: "terrace", pt: "o terraço", type: "noun" },
+      { en: "summer", pt: "o verão", type: "noun" },
+      { en: "guitar", pt: "o violão", type: "noun" },
+
+      // Verbes
+      { en: "to play, joke", pt: "brincar", type: "verb" },
+      { en: "to get married", pt: "casar-se", type: "verb" },
+      { en: "to rain", pt: "chover", type: "verb" },
+      { en: "to run", pt: "correr", type: "verb" },
+      { en: "to go for a walk/ride", pt: "dar um passeio", type: "verb" },
+      { en: "to leave, allow", pt: "deixar", type: "verb" },
+      { en: "to want, desire", pt: "desejar", type: "verb" },
+      { en: "to give up", pt: "desistir", type: "verb" },
+      { en: "to discuss, argue", pt: "discutir", type: "verb" },
+      { en: "to have a good time", pt: "divertir-se", type: "verb" },
+      { en: "to forget", pt: "esquecer-se (de)", type: "verb" },
+      { en: "to have a picnic", pt: "fazer um piquenique", type: "verb" },
+      { en: "to die", pt: "morrer", type: "verb" },
+      { en: "to change, move", pt: "mudar", type: "verb" },
+      { en: "to swim", pt: "nadar", type: "verb" },
+      { en: "to be born", pt: "nascer", type: "verb" },
+      { en: "to observe, watch", pt: "observar", type: "verb" },
+      { en: "to look (at)", pt: "olhar (para)", type: "verb" },
+      { en: "to pass, spend time", pt: "passar", type: "verb" },
+      { en: "to ask for, request", pt: "pedir", type: "verb" },
+      { en: "to apologize", pt: "pedir desculpas", type: "verb" },
+      { en: "to excuse oneself", pt: "pedir licença", type: "verb" },
+      { en: "to think", pt: "pensar", type: "verb" },
+      { en: "to jump, leap", pt: "pular", type: "verb" },
+      { en: "to decide, resolve", pt: "resolver", type: "verb" },
+      { en: "to know, know how", pt: "saber", type: "verb" },
+      { en: "to take a bath/shower", pt: "tomar banho", type: "verb" },
+      { en: "to swim in the ocean", pt: "tomar banho de mar", type: "verb" },
+      { en: "to travel", pt: "viajar", type: "verb" },
+
+      // Expressions
+      { en: "besides", pt: "além disso", type: "expression" },
+      { en: "suddenly", pt: "de repente", type: "expression" },
+      { en: "once in a while", pt: "de vez em quando", type: "expression" },
+      { en: "one more (beer...)", pt: "mais um(a)", type: "expression" },
+      { en: "Good Heavens!", pt: "Nossa!", type: "expression" },
+      { en: "again, once more", pt: "outra vez", type: "expression" },
+      { en: "Oops! / Sorry!", pt: "Desculpe!", type: "expression" },
+      { en: "Excuse me!", pt: "Com licença! / Dá licença!", type: "expression" },
+      { en: "little by little", pt: "pouco a pouco", type: "expression" }
+    ];
+
+    let currentCategory = 'all';
+
+    function filterCategory(category, btnElement) {
+      currentCategory = category;
+      document.querySelectorAll('.filters .btn').forEach(b => b.classList.remove('active'));
+      btnElement.classList.add('active');
+      renderVocab();
+    }
+
+    function cleanString(str) {
+      return str.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace(/[^a-z0-9]/g, "");
+    }
+
+    function checkAnswer(input, target) {
+      const userVal = cleanString(input.value);
+      const targetVal = cleanString(target);
+      
+      if (userVal === "") {
+        input.classList.remove('correct', 'incorrect');
+      } else if (targetVal.includes(userVal) && userVal.length > 2) {
+        input.classList.add('correct');
+        input.classList.remove('incorrect');
+      } else {
+        input.classList.add('incorrect');
+        input.classList.remove('correct');
+      }
+    }
+
+    function toggleReveal(id) {
+      const answerEl = document.getElementById(`answer-${id}`);
+      answerEl.classList.toggle('visible');
+    }
+
+    function renderVocab() {
+      const searchVal = document.getElementById('search').value.toLowerCase();
+      const container = document.getElementById('vocabList');
+      container.innerHTML = '';
+
+      const filtered = vocabulary.filter(item => {
+        const matchesCategory = currentCategory === 'all' || item.type === currentCategory;
+        const matchesSearch = item.en.toLowerCase().includes(searchVal) || item.pt.toLowerCase().includes(searchVal);
+        return matchesCategory && matchesSearch;
+      });
+
+      filtered.forEach((item, index) => {
+        const itemEl = document.createElement('div');
+        itemEl.className = 'vocab-item';
+        
+        let typeBadge = '<span class="badge">Nom</span>';
+        if (item.type === 'verb') typeBadge = '<span class="badge verb">Verbe</span>';
+        if (item.type === 'expression') typeBadge = '<span class="badge expression">Expr</span>';
+
+        itemEl.innerHTML = `
+          <div style="flex: 1;">
+            <div style="display: flex; align-items: center; gap: 8px;">
+              <span class="english-term">${item.en}</span>
+              ${typeBadge}
+            </div>
+            <div class="pt-answer" id="answer-${index}">${item.pt}</div>
+          </div>
+          <div class="input-wrapper">
+            <input type="text" class="pt-input" placeholder="Traduire en portugais..." oninput="checkAnswer(this, '${item.pt.replace(/'/g, "\\'")}')">
+            <button class="reveal-btn" onclick="toggleReveal(${index})">Voir</button>
+          </div>
+        `;
+
+        container.appendChild(itemEl);
+      });
+    }
+
+    // Initial render
+    renderVocab();
+  </script>
+</body>
+</html>
